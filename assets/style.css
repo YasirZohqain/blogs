@@ -1,0 +1,46 @@
+/* Main form styles for index.php */
+:root{
+	--bg:#f7f9fb;
+	--card:#ffffff;
+	--muted:#6b7280;
+	--primary:#2563eb;
+	--danger:#ef4444;
+	--radius:8px;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;margin:0}
+
+.form-wrap{max-width:520px;margin:48px auto;padding:28px;background:var(--card);border-radius:var(--radius);box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+.form-wrap h1{font-size:20px;margin:0 0 14px}
+.form-row{display:flex;gap:12px}
+.form-group{display:flex;flex-direction:column;margin-bottom:14px}
+.form-group.half{flex:1}
+.form-label{font-size:13px;color:var(--muted);margin-bottom:6px}
+.form-control{padding:10px 12px;border:1px solid #e6e9ef;border-radius:6px;background:transparent;font-size:14px;outline:none;transition:box-shadow .15s,border-color .15s}
+.form-control:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,0.08)}
+.form-textarea{min-height:120px;resize:vertical}
+.form-help{font-size:12px;color:var(--muted);margin-top:6px}
+
+.form-actions{display:flex;gap:10px;align-items:center;margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:7px;border:0;cursor:pointer;font-weight:600;font-size:14px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-outline{background:transparent;border:1px solid #d1d5db;color:#111}
+.btn:active{transform:translateY(1px)}
+
+.field-error{color:var(--danger);font-size:13px;margin-top:6px}
+.input-group{position:relative}
+.input-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:14px}
+
+/* responsive */
+@media (max-width:540px){
+	.form-wrap{margin:20px;padding:16px}
+	.form-row{flex-direction:column}
+}
+
+/* utility */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* small validation states */
+.is-invalid{border-color:var(--danger)!important;box-shadow:0 0 0 4px rgba(239,68,68,0.06)}
+.is-success{border-color:#10b981;box-shadow:0 0 0 4px rgba(16,185,129,0.06)}
