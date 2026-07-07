@@ -1,3 +1,12 @@
+<?php
+
+include 'connection/config.php';
+$dataFetch = "SELECT * FROM `story` ORDER BY id DESC";
+$result = mysqli_query($conn, $dataFetch);
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +39,23 @@
             <input type="submit" value="Submit" name="submit" class="btn btn-primary">
         </div>
     </form>
+
+
+
+    <div class="blog-list">
+        <h2>Blog Posts</h2>
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+            <div class="blog-post">
+                <img src="assets/upload/<?php echo $row['image']; ?>" alt="<?php echo $row['title']; ?>" class="blog-image">
+                <h3><?php echo $row['title']; ?></h3>
+                <p><?php echo $row['content']; ?></p>
+                    
+            </div>
+        <?php } ?>
+
+    </div>
+
+
     
 </body>
 </html>

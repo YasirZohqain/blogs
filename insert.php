@@ -40,9 +40,13 @@ if (isset($_POST['submit'])) {
 
          // 8. Execute the SQL query using the mysqli_query function, passing the database connection and the query string
          mysqli_query($conn, $query);
+
          // 9. Check if the query execution was successful and provide feedback to the user
         echo "Story published successfully!";
+
+
     } else {
+        
         // 10. If the image upload fails, display an error message to the user
         echo "Error: Failed to upload image file.";
     }
