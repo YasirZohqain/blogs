@@ -13,42 +13,54 @@ if (isset($_POST['submit'])) {
     // 1. Get the image file details from the $_FILES superglobal
     $img_location = $_FILES['image']['tmp_name'];
     $img_original_name = $_FILES['image']['name'];
-    
 
+    //echo "<b>Temporary Location:</b> " . $img_location . "<br>";
+
+    // Check karein agar user ne image select hi nahi ki
+    if (empty($img_location)) {
+        die("Error: Please select an image first.");
+    }
+   
 
     // 2. get the file extension of the uploaded image and convert it to lowercase
     $ext = strtolower(pathinfo($img_original_name, PATHINFO_EXTENSION));
 
 
-    // 3. Define an array of allowed file extensions for image uploads
-    $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp'];
-
-    // 4. Check if the uploaded file's extension is in the allowed list
-    if (!in_array($ext, $allowed_extensions)) {
+     // 3. Image ko check karne ke liye PHP ki memory mein source banaya
+    // Yeh original image ka data read karega taaki hum use compress kar sakein
+    if ($ext == 'jpg' || $ext == 'jpeg') {
+        $source_img = imagecreatefromjpeg($img_location);
+    } elseif ($ext == 'png') {
+        $source_img = imagecreatefrompng($img_location);
+    } elseif ($ext == 'webp') {
+        $source_img = imagecreatefromwebp($img_location);
+    } else {
+        // Agar image format in teeno ke alawa kuch aur hai (ya virus hai), toh yahin block kar do
         die("Error: Only JPG, JPEG, PNG, and WEBP images are allowed.");
     }
 
-    // 5. Generate a unique filename for the uploaded image to avoid overwriting existing files
-    $image_final = uniqid('', true) . '.' . $ext;
+    // 4. Naya bilkul unique naam banaya, aur extension lagayi '.webp' (Modern & lightweight format)
+    $image_final = uniqid('story_', true) . '.webp';
+
+     // Target folder ka rasta (path) tayar kiya
+         $target_path = 'assets/upload/' . $image_final;
 
 
-    // 6. Move the uploaded image from its temporary location to the desired directory on the server
-     if (move_uploaded_file($img_location, 'assets/upload/'.$image_final)) {
-
-        // 7. Prepare the SQL query to insert the story details into the database, including the title, content, and image filename
-          $query = "INSERT INTO `story`(`title`, `content`, `image`) VALUES ('$TITLE','$CONTENT','$image_final')";
-
-         // 8. Execute the SQL query using the mysqli_query function, passing the database connection and the query string
-         mysqli_query($conn, $query);
-
-         // 9. Check if the query execution was successful and provide feedback to the user
-        echo "Story published successfully!";
-
-
-    } else {
+  // 5. COMPRESSION LAYER: Yeh image ka size chota karke folder mein save karega
+    // Parameters: ($source_image, $target_path, $quality)
+    // Quality ko 60-70 rakhna sabse best hota hai (Size 80% tak chota ho jata hai, quality wahi rehti hai)
+    if (imagewebp($source_img, $target_path, 65)) {
         
-        // 10. If the image upload fails, display an error message to the user
-        echo "Error: Failed to upload image file.";
+        // Memory saaf karne ke liye temporary temporary object ko delete kiya (Server performance ke liye zaroori hai)
+        imagedestroy($source_img);
+
+        // 6. Database query tayar ki aur chalayi
+        $query = "INSERT INTO `story`(`title`, `content`, `image`) VALUES ('$TITLE','$CONTENT','$image_final')";
+        mysqli_query($conn, $query);
+        
+        echo "Story published and Image Compressed Successfully!";
+    } else {
+        echo "Error: Failed to compress and upload image file.";
     }
  
 
