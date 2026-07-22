@@ -1,7 +1,7 @@
 <?php
 
 include 'connection/config.php';
-$dataFetch = "SELECT * FROM `story` ORDER BY id DESC";
+$dataFetch = "SELECT * FROM `story`";
 $result = mysqli_query($conn, $dataFetch);
 ?>
 
@@ -49,6 +49,17 @@ $result = mysqli_query($conn, $dataFetch);
                 <img src="assets/upload/<?php echo $row['image']; ?>" alt="<?php echo $row['title']; ?>" class="blog-image">
                 <h3><?php echo $row['title']; ?></h3>
                 <p><?php echo $row['content']; ?></p>
+                <p><?php echo $row['ID']?></p>
+
+                <form action="delete.php" method="POST" onsubmit="return confirm('Delete this post?');">
+                    <input type="hidden" name="ID" value="<?php echo $row['ID']; ?>">
+                    <button type="submit" name="delete">Delete</button>
+                </form>
+
+                <form action="update.php" method="POST">
+                    <input type="hidden" name="ID" value="<?php echo $row['ID']; ?>">
+                    <button type="submit" name="edit">Update</button>
+                </form>
                     
             </div>
         <?php } ?>

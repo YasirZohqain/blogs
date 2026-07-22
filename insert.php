@@ -46,12 +46,12 @@ if (isset($_POST['submit'])) {
          $target_path = 'assets/upload/' . $image_final;
 
 
-  // 5. COMPRESSION LAYER: Yeh image ka size chota karke folder mein save karega
+    // 5. COMPRESSION LAYER: Yeh image ka size chota karke folder mein save karega
     // Parameters: ($source_image, $target_path, $quality)
     // Quality ko 60-70 rakhna sabse best hota hai (Size 80% tak chota ho jata hai, quality wahi rehti hai)
     if (imagewebp($source_img, $target_path, 65)) {
         
-        // Memory saaf karne ke liye temporary temporary object ko delete kiya (Server performance ke liye zaroori hai)
+        // Memory saaf karne ke liye temporary  object ko delete kiya (Server performance ke liye zaroori hai)
         imagedestroy($source_img);
 
         // 6. Database query tayar ki aur chalayi
@@ -59,7 +59,9 @@ if (isset($_POST['submit'])) {
         mysqli_query($conn, $query);
         
         echo "Story published and Image Compressed Successfully!";
-    } else {
+        header('Location: index.php');
+    } 
+    else {
         echo "Error: Failed to compress and upload image file.";
     }
  
@@ -71,3 +73,6 @@ if (isset($_POST['submit'])) {
 
 
 ?>
+
+
+
